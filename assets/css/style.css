@@ -27,6 +27,10 @@ button {
   font-weight: bold;
 }
 
+button:hover {
+  opacity: 0.5;
+}
+
 #multiple-choice {
   display: flex;
   flex-direction: column;

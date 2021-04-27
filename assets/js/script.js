@@ -8,7 +8,7 @@ var mText = document.querySelector("#main-text");
 var choiceBlock = document.querySelector("#choice-block");
 var sButton = document.querySelector("#start-button");
 var index = 0;
-var time = 90;
+var timer = 90;
 
 // Declare questions array and options array for each question:
 var questionList = [
@@ -36,6 +36,7 @@ var answers = [
   "quotes",
   "Console.log",
 ];
+
 // Declare object array:
 var questionArray = new Array();
 
@@ -51,8 +52,6 @@ function populate() {
 }
 
 // Declare function askQuestions
-
-// ------------------------------------------------
 function askQuestions() {
   index = Math.floor(Math.random() * questionArray.length);
   // Think about adding a checker here to avoid the same question again?-----------------------
@@ -91,6 +90,7 @@ function startQuiz() {
   populate();
   console.log(questionArray);
   // start timer here?
+  sButton.setAttribute("style", "opacity: 1.0");
   sButton.addEventListener("click", askQuestions);
   choiceBlock.addEventListener("click", evaluateAnswer);
   // timer ends here?
