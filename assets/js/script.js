@@ -14,6 +14,12 @@ var questionCounter = 0;
 var score = 0;
 var timeInterval;
 
+// Declare user object
+var user = {
+  score: 0,
+  initials: "",
+};
+
 // Declare questions array and options array for each question:
 var questionList = [
   "Commonly used data types DO NOT include:",
@@ -72,8 +78,11 @@ function startTimer() {
 
 function endGame() {
   clearInterval(timeInterval);
+  choiceBlock.setAttribute("style", "display:none;");
+  mText.setAttribute("style", "display:none;");
   // location.reload();
-  headEl.textContent = "GAME OVER, YOUR SCORE IS: " + score;
+  mTitle.textContent = "GAME OVER, YOUR SCORE IS: " + score;
+  user.score = score;
   console.log(score);
 }
 
@@ -109,7 +118,7 @@ function evaluateAnswer(event) {
   } else {
     // Subtract time from the clock
     console.log("Wrong!!!");
-    timer = timer - 5;
+    timer = timer - 10;
     // append to document and display
   }
 
