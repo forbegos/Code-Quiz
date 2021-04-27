@@ -2,6 +2,14 @@
 
 //--  DECLARATIONS ----
 
+// Declare document elements
+var mTitle = document.querySelector("#main-title");
+var mText = document.querySelector("#main-text");
+var choiceBlock = document.querySelector("#choice-block");
+var sButton = document.querySelector("#start-button");
+var index = 0;
+var time = 90;
+
 // Declare questions array and options array for each question:
 var questionList = [
   "Commonly used data types DO NOT include:",
@@ -11,38 +19,73 @@ var questionList = [
   "A very useful tool used during development and debugging for printing content to the debugger is:",
 ];
 
+// Declare options list for each question in an array
 var optionsArray = [
   ["strings", "booleans", "alerts", "numbers"],
   ["quotes", "curly brackets", "parenthesis", "square brackets"],
+  ["numbers and strings", "other arrays", "booleans", "all of the above"],
+  ["commas", "curly brackets", "quotes", "parenthesis"],
+  ["Javascript", "Terminal/bash", "For loops", "Console.log"],
 ];
 
-console.log(optionsArray);
-
 // Declare answers array:
-var answers = ["alerts", "parenthesis"];
-// Declare new array:
+var answers = [
+  "alerts",
+  "parenthesis",
+  "all of the above",
+  "quotes",
+  "Console.log",
+];
+// Declare object array:
 var questionArray = new Array();
 
+// function to populate object array
 function populate() {
-  for (let i = 0; i < 2; i++) {
-    console.log(i);
+  for (let i = 0; i < questionList.length; i++) {
+    // console.log(i);
     questionArray.push(new Object());
     questionArray[i].question = questionList[i];
     questionArray[i].options = optionsArray[i];
-    questionArray[i].answer = "TEST";
+    questionArray[i].answer = answers[i];
   }
 }
 
+// Declare function askQuestions
+
+// ------------------------------------------------
+function askQuestions() {
+  index = Math.floor(Math.random() * questionArray.length);
+  console.log("Index: " + index);
+  mTitle.textContent = "";
+  sButton.setAttribute("style", "display:none;");
+  choiceBlock.setAttribute("style", "display:all");
+  mText.textContent = questionArray[index].question;
+  // Use a for loop to populate the respective multiple choice buttons
+  for (let i = 0; i < questionArray[index].options.length; i++) {
+    choiceBlock.children[i].textContent = questionArray[index].options[i];
+  }
+}
+
+// Declare function evaluateAnswer
+function evaluateAnswer(event) {
+  event.preventDefault();
+  console.log("Index no. at evaluate: " + index);
+  console.log(event.target.innerHTML);
+  console.log(questionArray[index].answer);
+  if (event.target.innerHTML === questionArray[index].answer) {
+    console.log("Correct Answer!");
+  } else {
+    console.log("Wrong!!!");
+  }
+  index = 0;
+  askQuestions();
+}
+
+// Program EXECUTION
 populate();
 console.log(questionArray);
-
-// Declare function askQuestions (QA)
-function askQuestions(questionArray) {}
-// Declare function evaluateAnswer (QA)
-function evaluateAnswer(questionArray) {}
-
-// ----------------------- Execution ----------------------------
-
-// Declare function startQuiz
-function startQuiz() {}
-// startQuiz()
+choiceBlock.setAttribute("style", "display:none;");
+// add timer ----------------------------------------
+sButton.addEventListener("click", askQuestions);
+choiceBlock.addEventListener("click", evaluateAnswer);
+// add score and initials to local storage

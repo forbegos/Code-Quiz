@@ -8,7 +8,7 @@ main {
   align-items: center;
 }
 
-#question-section {
+#question-block {
   display: flex;
   flex-direction: column;
   height: 300px;
@@ -18,7 +18,7 @@ main {
   text-align: center;
 }
 
-#start-button {
+button {
   padding: 5px;
   padding-left: 20px;
   padding-right: 20px;
@@ -34,4 +34,10 @@ main {
   /* border: red solid 2px; */
   height: 300px;
   width: 700px;
+}
+
+#choice-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
