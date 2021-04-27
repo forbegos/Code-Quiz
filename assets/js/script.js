@@ -13,6 +13,7 @@ var timer = 60;
 var questionCounter = 0;
 var score = 0;
 var timeInterval;
+var correctAnswer = true;
 
 // Declare user object
 var user = {
@@ -69,7 +70,7 @@ function startTimer() {
     headEl.textContent = "Time: " + timer;
     if (timer === 0) {
       clearInterval(timeInterval);
-      console.log("timer down to zero");
+      endGame();
     }
   }, 1000);
 }
@@ -80,30 +81,42 @@ function endGame() {
   clearInterval(timeInterval);
   choiceBlock.setAttribute("style", "display:none;");
   mText.setAttribute("style", "display:none;");
-  // location.reload();
-  mTitle.textContent = "GAME OVER, YOUR SCORE IS: " + score;
+  user.score = timer;
+  if ((questionCounter = questionArray.length) && !correctAnswer) {
+    user.score = timer + 10;
+  }
+
+  mTitle.textContent = "GAME OVER, YOUR SCORE IS: " + user.score;
   user.score = score;
-  console.log(score);
 }
 
+var askedQuestions = [];
 // Declare function askQuestions
 function askQuestions() {
   index = Math.floor(Math.random() * questionArray.length);
-  // Think about adding a checker here to avoid the same question again?-----------------------
+  console.log(askedQuestions);
   console.log("Index: " + index);
-  mTitle.textContent = "";
-  sButton.setAttribute("style", "display:none;");
-  choiceBlock.setAttribute("style", "display:all");
-  mText.textContent =
-    "Question No. " +
-    (questionCounter + 1) +
-    ":  " +
-    questionArray[index].question;
-  // Use a for loop to populate the respective multiple choice buttons
-  for (let i = 0; i < questionArray[index].options.length; i++) {
-    choiceBlock.children[i].textContent = questionArray[index].options[i];
+  if (!askedQuestions.includes(index)) {
+    // Think about adding a checker here to avoid the same question again?-----------------------
+
+    mTitle.textContent = "";
+    sButton.setAttribute("style", "display:none;");
+    choiceBlock.setAttribute("style", "display:all");
+    mText.textContent =
+      "Question No. " +
+      (questionCounter + 1) +
+      ":  " +
+      questionArray[index].question;
+    // Use a for loop to populate the respective multiple choice buttons
+    for (let i = 0; i < questionArray[index].options.length; i++) {
+      choiceBlock.children[i].textContent = questionArray[index].options[i];
+    }
+
+    questionCounter++;
+    askedQuestions.push(index);
+  } else {
+    askQuestions();
   }
-  questionCounter++;
 }
 
 // Declare function evaluateAnswer
@@ -113,31 +126,22 @@ function evaluateAnswer(event) {
   console.log(event.target.innerHTML);
   console.log(questionArray[index].answer);
   if (event.target.innerHTML === questionArray[index].answer) {
-    console.log("Correct Answer!");
-    // append to document and display
+    correctAnswer = true;
+    console.log("Correct");
   } else {
-    // Subtract time from the clock
+    correctAnswer = false;
     console.log("Wrong!!!");
     timer = timer - 10;
-    // append to document and display
   }
-
-  // Check if there is time remaining
-  if (timer === 0) {
-    headEl.textContent = "TIME's UP!";
-    score = 0;
-    endGame();
-    console.log(score);
-    // Check if questions haven't run out;
-    console.log(questionCounter);
-  } else if (questionCounter < questionArray.length) {
-    index = 0;
-    askQuestions();
-  } else {
-    score = timer;
-    console.log(score);
-    endGame();
-  }
+  console.log(timer);
+  if (questionCounter)
+    if (questionCounter < questionArray.length) {
+      // Check if there are questions remaining
+      // index = 0;
+      askQuestions();
+    } else {
+      endGame();
+    }
 }
 
 // Declare function to run program "startQuiz"

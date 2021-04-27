@@ -8,6 +8,12 @@ main {
   align-items: center;
 }
 
+header {
+  display: flex;
+  justify-content: flex-end;
+  height: 100px;
+}
+
 #question-block {
   display: flex;
   flex-direction: column;
