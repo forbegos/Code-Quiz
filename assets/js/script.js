@@ -55,6 +55,7 @@ function populate() {
 // ------------------------------------------------
 function askQuestions() {
   index = Math.floor(Math.random() * questionArray.length);
+  // Think about adding a checker here to avoid the same question again?-----------------------
   console.log("Index: " + index);
   mTitle.textContent = "";
   sButton.setAttribute("style", "display:none;");
@@ -75,17 +76,25 @@ function evaluateAnswer(event) {
   if (event.target.innerHTML === questionArray[index].answer) {
     console.log("Correct Answer!");
   } else {
+    // Subtract time from the clock
     console.log("Wrong!!!");
   }
   index = 0;
+  // IF timer !=== 0 then do
   askQuestions();
+  // -------------------------
+}
+
+// Declare function to run program "startQuiz"
+function startQuiz() {
+  choiceBlock.setAttribute("style", "display:none;");
+  populate();
+  console.log(questionArray);
+  // start timer here?
+  sButton.addEventListener("click", askQuestions);
+  choiceBlock.addEventListener("click", evaluateAnswer);
+  // timer ends here?
 }
 
 // Program EXECUTION
-populate();
-console.log(questionArray);
-choiceBlock.setAttribute("style", "display:none;");
-// add timer ----------------------------------------
-sButton.addEventListener("click", askQuestions);
-choiceBlock.addEventListener("click", evaluateAnswer);
-// add score and initials to local storage
+startQuiz();
