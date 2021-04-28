@@ -9,6 +9,8 @@ var choiceBlock = document.querySelector("#choice-block");
 var sButton = document.querySelector("#start-button");
 var headEl = document.querySelector("header");
 var resultEl = document.querySelector("#result");
+var formElement = $("form");
+var InitialsEl = $('input[id="form-input"]');
 var index = 0;
 var timer = 60;
 var questionCounter = 0;
@@ -76,12 +78,19 @@ function startTimer() {
   }, 1000);
 }
 
-// Declare function endGame
+function logInitials(event) {
+  event.preventDefault();
+  user.initials = InitialsEl.val();
+  console.log(InitialsEl.val());
+  console.log(user);
+}
 
+// Declare function endGame
 function endGame() {
   clearInterval(timeInterval);
   choiceBlock.setAttribute("style", "display:none;");
   mText.setAttribute("style", "display:none;");
+  formElement.css("display", "flex");
   if (timer === 0) {
     user.score = 0;
   } else if ((questionCounter = questionArray.length) && !correctAnswer) {
@@ -89,8 +98,6 @@ function endGame() {
   } else {
     user.score = timer;
   }
-
-  mTitle.textContent = "GAME OVER, YOUR SCORE IS: " + user.score;
 }
 
 // Declare function askQuestions
@@ -101,7 +108,6 @@ function askQuestions() {
   // Checks to make sure question is not asked twice per session
   if (!askedQuestions.includes(index)) {
     mTitle.textContent = "";
-
     sButton.setAttribute("style", "display:none;");
     choiceBlock.setAttribute("style", "display:all");
     mText.setAttribute("style", "font-size: 150%");
@@ -135,12 +141,14 @@ function evaluateAnswer(event) {
   if (event.target.textContent === questionArray[index].answer) {
     correctAnswer = true;
     resultEl.textContent = "Correct!";
+    // Adding a short timeout to display result
     setTimeout(function pause() {
       resultEl.textContent = "";
     }, 500);
   } else {
     correctAnswer = false;
     resultEl.textContent = "Wrong answer!";
+    // Adding a short timeout to display result
     setTimeout(function pause() {
       resultEl.textContent = "";
     }, 500);
@@ -160,8 +168,8 @@ function evaluateAnswer(event) {
 // Declare function to run program "startQuiz"
 function startQuiz() {
   choiceBlock.setAttribute("style", "display:none;");
+  formElement.css("display", "none");
   populate();
-  console.log(questionArray);
   sButton.setAttribute("style", "opacity: 1.0");
   sButton.addEventListener("click", startTimer);
   choiceBlock.addEventListener("click", evaluateAnswer);
@@ -169,3 +177,7 @@ function startQuiz() {
 
 // Program EXECUTION
 startQuiz();
+formElement.on("submit", logInitials);
+console.log(user);
+mTitle.textContent = "GAME OVER, YOUR SCORE IS: " + user.score;
+mTitle.textContent = "YOUR INITIALS ARE: " + user.initials;
