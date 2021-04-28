@@ -14,6 +14,7 @@ var questionCounter = 0;
 var score = 0;
 var timeInterval;
 var correctAnswer = true;
+var askedQuestions = [];
 
 // Declare user object
 var user = {
@@ -85,12 +86,14 @@ function endGame() {
   if ((questionCounter = questionArray.length) && !correctAnswer) {
     user.score = timer + 10;
   }
+  if (timer === 0) {
+    user.score = 0;
+  }
 
   mTitle.textContent = "GAME OVER, YOUR SCORE IS: " + user.score;
   user.score = score;
 }
 
-var askedQuestions = [];
 // Declare function askQuestions
 function askQuestions() {
   index = Math.floor(Math.random() * questionArray.length);
@@ -102,6 +105,7 @@ function askQuestions() {
     mTitle.textContent = "";
     sButton.setAttribute("style", "display:none;");
     choiceBlock.setAttribute("style", "display:all");
+    mText.setAttribute("style", "font-size: 150%");
     mText.textContent =
       "Question No. " +
       (questionCounter + 1) +
@@ -109,7 +113,8 @@ function askQuestions() {
       questionArray[index].question;
     // Use a for loop to populate the respective multiple choice buttons
     for (let i = 0; i < questionArray[index].options.length; i++) {
-      choiceBlock.children[i].textContent = questionArray[index].options[i];
+      choiceBlock.children[i].textContent =
+        i + 1 + ". " + questionArray[index].options[i];
     }
 
     questionCounter++;
