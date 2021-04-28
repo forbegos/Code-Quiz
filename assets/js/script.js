@@ -11,7 +11,6 @@ var headEl = document.querySelector("header");
 var index = 0;
 var timer = 60;
 var questionCounter = 0;
-var score = 0;
 var timeInterval;
 var correctAnswer = true;
 var askedQuestions = [];
@@ -82,16 +81,15 @@ function endGame() {
   clearInterval(timeInterval);
   choiceBlock.setAttribute("style", "display:none;");
   mText.setAttribute("style", "display:none;");
-  user.score = timer;
-  if ((questionCounter = questionArray.length) && !correctAnswer) {
-    user.score = timer + 10;
-  }
   if (timer === 0) {
     user.score = 0;
+  } else if ((questionCounter = questionArray.length) && !correctAnswer) {
+    user.score = timer + 10;
+  } else {
+    user.score = timer;
   }
 
   mTitle.textContent = "GAME OVER, YOUR SCORE IS: " + user.score;
-  user.score = score;
 }
 
 // Declare function askQuestions
@@ -99,9 +97,8 @@ function askQuestions() {
   index = Math.floor(Math.random() * questionArray.length);
   console.log(askedQuestions);
   console.log("Index: " + index);
+  // Checks to make sure question is not asked twice per session
   if (!askedQuestions.includes(index)) {
-    // Think about adding a checker here to avoid the same question again?-----------------------
-
     mTitle.textContent = "";
     sButton.setAttribute("style", "display:none;");
     choiceBlock.setAttribute("style", "display:all");
@@ -112,9 +109,14 @@ function askQuestions() {
       ":  " +
       questionArray[index].question;
     // Use a for loop to populate the respective multiple choice buttons
+    console.log(questionArray[index].options);
+    questionArray[index].options.sort(function (a, b) {
+      return 0.5 - Math.random();
+    });
+
+    console.log(questionArray[index].options);
     for (let i = 0; i < questionArray[index].options.length; i++) {
-      choiceBlock.children[i].textContent =
-        i + 1 + ". " + questionArray[index].options[i];
+      choiceBlock.children[i].textContent = questionArray[index].options[i];
     }
 
     questionCounter++;
@@ -130,7 +132,7 @@ function evaluateAnswer(event) {
   console.log("Index no. at evaluate: " + index);
   console.log(event.target.innerHTML);
   console.log(questionArray[index].answer);
-  if (event.target.innerHTML === questionArray[index].answer) {
+  if (event.target.textContent === questionArray[index].answer) {
     correctAnswer = true;
     console.log("Correct");
   } else {
@@ -142,7 +144,6 @@ function evaluateAnswer(event) {
   if (questionCounter)
     if (questionCounter < questionArray.length) {
       // Check if there are questions remaining
-      // index = 0;
       askQuestions();
     } else {
       endGame();
