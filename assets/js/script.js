@@ -11,6 +11,7 @@ var headEl = document.querySelector("header");
 var resultEl = document.querySelector("#result");
 var formElement = $("form");
 var InitialsEl = $('input[id="form-input"]');
+var highScoresElement = document.querySelector("#high-scores");
 var index = 0;
 var timer = 60;
 var questionCounter = 0;
@@ -23,6 +24,9 @@ var user = {
   score: 0,
   initials: "",
 };
+
+var userArray = [user];
+localStorage.setItem("userArray", JSON.stringify(userArray));
 
 // Declare questions array and options array for each question:
 var questionList = [
@@ -78,11 +82,31 @@ function startTimer() {
   }, 1000);
 }
 
+// Display high scores
+function displayHighScores() {
+  formElement.css("display", "none");
+  mTitle.setAttribute("style", "display: flex; justify-content:center");
+  mTitle.textContent = "High Scores";
+  userArray = JSON.parse(localStorage.getItem("userArray"));
+  console.log(userArray);
+  for (let i = 1; i < userArray.length; i++) {
+    var newElement = document.createElement("p");
+    newElement.textContent =
+      "Initials: " + userArray[i].initials + "--->" + userArray[i].score;
+    highScoresElement.appendChild(newElement);
+  }
+}
+// Log initials into user object and generate array of users to store in local storage
 function logInitials(event) {
   event.preventDefault();
+  userArray = JSON.parse(localStorage.getItem("userArray"));
   user.initials = InitialsEl.val();
   console.log(InitialsEl.val());
   console.log(user);
+  userArray.push(user);
+  console.log(userArray);
+  localStorage.setItem("userArray", JSON.stringify(userArray));
+  displayHighScores();
 }
 
 // Declare function endGame
@@ -98,6 +122,7 @@ function endGame() {
   } else {
     user.score = timer;
   }
+  formElement.on("submit", logInitials);
 }
 
 // Declare function askQuestions
@@ -177,7 +202,3 @@ function startQuiz() {
 
 // Program EXECUTION
 startQuiz();
-formElement.on("submit", logInitials);
-console.log(user);
-mTitle.textContent = "GAME OVER, YOUR SCORE IS: " + user.score;
-mTitle.textContent = "YOUR INITIALS ARE: " + user.initials;
