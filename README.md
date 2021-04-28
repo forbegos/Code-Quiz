@@ -9,3 +9,9 @@
 ### Once the quiz ends, you are given the opportunity to record your score into a "high scores" list. The score is the amount of time that was left when the quiz ended.
 
 ### Here is a link for the application: https://forbegos.github.io/Code-Quiz/
+
+### Following are screenshots of the application:
+
+![](./assets/Screenshot1.png)
+
+![](./assets/Screenshot2.png)
