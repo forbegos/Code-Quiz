@@ -8,6 +8,7 @@ var mText = document.querySelector("#main-text");
 var choiceBlock = document.querySelector("#choice-block");
 var sButton = document.querySelector("#start-button");
 var headEl = document.querySelector("header");
+var resultEl = document.querySelector("#result");
 var index = 0;
 var timer = 60;
 var questionCounter = 0;
@@ -100,6 +101,7 @@ function askQuestions() {
   // Checks to make sure question is not asked twice per session
   if (!askedQuestions.includes(index)) {
     mTitle.textContent = "";
+
     sButton.setAttribute("style", "display:none;");
     choiceBlock.setAttribute("style", "display:all");
     mText.setAttribute("style", "font-size: 150%");
@@ -114,11 +116,9 @@ function askQuestions() {
       return 0.5 - Math.random();
     });
 
-    console.log(questionArray[index].options);
     for (let i = 0; i < questionArray[index].options.length; i++) {
       choiceBlock.children[i].textContent = questionArray[index].options[i];
     }
-
     questionCounter++;
     askedQuestions.push(index);
   } else {
@@ -134,16 +134,23 @@ function evaluateAnswer(event) {
   console.log(questionArray[index].answer);
   if (event.target.textContent === questionArray[index].answer) {
     correctAnswer = true;
-    console.log("Correct");
+    resultEl.textContent = "Correct!";
+    setTimeout(function pause() {
+      resultEl.textContent = "";
+    }, 500);
   } else {
     correctAnswer = false;
-    console.log("Wrong!!!");
+    resultEl.textContent = "Wrong answer!";
+    setTimeout(function pause() {
+      resultEl.textContent = "";
+    }, 500);
     timer = timer - 10;
   }
   console.log(timer);
   if (questionCounter)
     if (questionCounter < questionArray.length) {
       // Check if there are questions remaining
+
       askQuestions();
     } else {
       endGame();
